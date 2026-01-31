@@ -1,0 +1,24 @@
+#Arquivos de Sistema e Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.DS_Store
+Thumbs.db
+
+#Ambientes Virtuais
+venv/
+.venv/
+env/
+.env
+
+#Configurações da IDE (VS Code)
+.vscode/
+
+#Dados comentados para serem enviados
+# data/raw/
+# data/processed/
+
+#Modelo
+#Mantemos comentado para que o .pkl SEJA enviado)
+# *.pkl
