@@ -1,24 +1,19 @@
-#Arquivos de Sistema e Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.DS_Store
-Thumbs.db
-
-#Ambientes Virtuais
+# Ambiente Virtual
 venv/
-.venv/
 env/
 .env
 
-#Configurações da IDE (VS Code)
-.vscode/
+# Python (Arquivos compilados)
+__pycache__/
+*.py[cod]
+*$py.class
 
-#Dados comentados para serem enviados
-# data/raw/
-# data/processed/
+# Jupyter Notebook (Arquivos temporários)
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 
-#Modelo
-#Mantemos comentado para que o .pkl SEJA enviado)
-# *.pkl
+
+# Ignorar arquivos temporários e de sistema, mas MANTER os dados do projeto
+data/**/.DS_Store
+data/**/Thumbs.db
+

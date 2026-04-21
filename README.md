@@ -1,53 +1,68 @@
+
 # 🧠 Mental Health Predictor in Tech
 
 ## 📌 Visão Geral
-Este projeto é uma solução de Machine Learning desenvolvida para identificar a probabilidade de colaboradores do setor de tecnologia necessitarem de tratamento para saúde mental. 
 
-O objetivo é fornecer uma ferramenta de **triagem preventiva** para departamentos de RH e Saúde Ocupacional, permitindo ações proativas antes que quadros de burnout ou transtornos mentais se agravem.
+Este projeto é uma solução de Ciência de Dados de alto nível desenvolvida para identificar a probabilidade de colaboradores do setor de tecnologia necessitarem de tratamento de saúde mental. A arquitetura foi desenhada com foco em **Engenharia de Software** e **Estatística Inferencial**.
 
+## 💼 Business Case & ROI
 
-## 💼 Problema de Negócio
-A saúde mental no setor de tecnologia é um desafio crescente. Muitas vezes, o estigma ou a falta de clareza sobre os sintomas impedem que profissionais busquem ajuda.
+  * **Custo da Inação:** O turnover de um dev custa \~1.5x seu salário anual. Um desligamento gera prejuízo estimado de **R$ 150.000**.
+  * **Eficiência:** Com **Recall de 87%**, ao prevenir apenas 3 desligamentos anuais, a economia supera **R$ 400.000**, pagando o projeto e gerando lucro operacional.
+  * **Validação:** Modelo apoia o RH (campanhas direcionadas), Gestores (segurança psicológica) e Diretoria (KPIs de retenção).
 
-**O desafio:** Como podemos utilizar dados demográficos e comportamentais para prever, com alta sensibilidade, se um colaborador precisa de suporte profissional?
+## 📊 Diagnóstico da EDA & Feature Selection
 
-**A Solução:** Um modelo preditivo focado em **Recall (Sensibilidade)**, priorizando a detecção de casos positivos para minimizar o risco de não identificar alguém que precisa de ajuda (Falso Negativo).
+Utilizamos o **V de Cramér** para selecionar variáveis com real força de associação:
 
-## 📊 Principais Insights (EDA)
-A Análise Exploratória de Dados revelou padrões importantes:
-1.  **Histórico Familiar:** É o fator preditivo mais forte. Colaboradores com histórico familiar de doenças mentais têm uma probabilidade significativamente maior de necessitar de tratamento.
-2.  **Interferência no Trabalho:** A percepção subjetiva de que a saúde mental "interfere no trabalho" (mesmo que raramente) é um alerta vermelho crítico.
-3.  **Ambiente Corporativo:** A existência de benefícios claros e facilidade para tirar licença médica influenciam positivamente a busca por tratamento.
+  * **Preditores Críticos:** `work_interfere` (0.36) e `family_history` (0.31).
+  * **Insights Organizacionais:** Empresas médias sofrem com o "limbo da comunicação", onde o desconhecimento de benefícios (grupo "Don't Know") paralisa a busca por ajuda.
+  * **Cultura:** O medo de retaliação é a barreira nº 1 para a transparência com supervisores.
 
-## 🛠️ Metodologia e Tecnologias
-* **Linguagem:** Python
-* **Bibliotecas:** Pandas, Numpy, Seaborn, Matplotlib, Scikit-learn, Joblib.
-* **Pipeline:**
-    * Tratamento de dados nulos (Imputação).
-    * Limpeza de dados categóricos.
-    * *Feature Engineering* e *One-Hot Encoding*.
-* **Modelo Final:** **Gradient Boosting Classifier**.
-* **Estratégia de Tuning:** Otimização de hiperparâmetros com foco em maximizar o Recall, ajustando o *Decision Threshold* para **0.40**.
+## 📈 Benchmarking e Performance (Curva ROC/AUC)
 
-## 📈 Performance do Modelo
-O modelo foi calibrado para atuar como uma ferramenta de **Screening (Triagem)**:
+O **Gradient Boosting** foi selecionado após comparação rigorosa:
+
+1.  **Gradient Boosting (Vencedor):** Melhor capacidade de distinção entre classes e subida rápida na Sensibilidade (Eixo Y), essencial para diagnósticos de saúde.
+2.  **Logistic Regression:** Desempenho sólido, mas inferior em relações não lineares.
+3.  **Random Forest:** Apresentou menor generalização comparado ao Boosting neste dataset.
+
+### Métricas Finais (Threshold: 0.40)
 
 | Métrica | Resultado | Interpretação |
 | :--- | :--- | :--- |
-| **Recall (Sensibilidade)** | **87%** | De cada 100 casos reais, o modelo detecta 87. |
-| **Precision** | **69%** | Quando o modelo alerta, ele está certo ~70% das vezes. |
-| **Acurácia** | **73%** | Performance geral do modelo. |
+| **Recall** | **87%** | **Foco Total:** Identifica 87% de quem realmente precisa de ajuda. |
+| **Precisão** | **69%** | Eficiência na gestão de alarmes falsos. |
+| **Verdadeiros Positivos** | **110** | Casos reais identificados com sucesso. |
+| **Falsos Negativos** | **17** | Apenas 17 casos perdidos (Mínimo histórico). |
 
-> *Nota: A escolha por um threshold de 0.40 gera mais Falsos Positivos (alarmes falsos), uma decisão estratégica para priorizar o cuidado humano.*
+## 💡 Por que Gradient Boosting? (Feature Importance)
 
-## 📂 Estrutura do Projeto
-```bash
-├── data/
-│   ├── raw/           #Dataset original
-│   └── processed/     #Dados tratados
-├── notebooks/         #Jupyter Notebooks (EDA e Modelagem)
-├── src/               #Código Fonte da Aplicação
-│   ├── app.py         #Interface Web (Streamlit)
-│   └── modelo...pkl   #Modelo treinado e serializado
-├── requirements.txt   #Dependências do projeto
-└── README.md          #Documentação
+A análise de importância das variáveis confirma a hierarquia do modelo:
+
+  * **Fatores Pessoais (Topo):** Histórico Familiar e Interferência no Trabalho dominam a predição.
+  * **Políticas Internas (Meio):** Facilidade de licença e opções de cuidado têm peso estratégico.
+  * **Demografia (Cauda):** Gênero e País demonstraram ser ruído estatístico, provando que a saúde mental é uma questão **humana e universal**.
+
+## 🛠️ Estrutura do Projeto
+
+```text
+├── data/               # Raw (original) e Processed (limpo)
+├── models/             # final_model_health.pkl
+├── notebooks/          # EDA, Curva ROC e V de Cramér
+├── src/                # Código Modular (Preprocessing, Training, Eval)
+├── main.py             # Orquestrador do Pipeline
+├── app.py              # Interface Streamlit
+└── requirements.txt    # Dependências (Python 3.11)
+```
+
+## 🚀 Como Executar
+
+1.  `pip install -r requirements.txt`
+2.  `python main.py` (Treina, avalia e salva o modelo)
+3.  `streamlit run app.py` (Inicia a interface de predição)
+
+-----
+
+**Desenvolvido por [Felipe Tamiozzo](https://www.google.com/search?q=https://linkedin.com/in/felipe-tamiozzo)**
+*Cientista de Dados focado em converter dados em decisões estratégicas.*
