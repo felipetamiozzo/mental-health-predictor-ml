@@ -1,5 +1,4 @@
 
-````markdown
 # 🧠 Mental Health Predictor in Tech
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_svg.svg)](https://mental-health-tech-survey.streamlit.app)
